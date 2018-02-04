@@ -4,7 +4,7 @@ import {
   withRouter
 } from 'react-router-dom';
 import * as routes from '../constants/routes';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 
 const SignUpPage = ({history}) =>
   <div>
@@ -41,15 +41,20 @@ class SignUpForm extends Component {
 
     auth.doCreateUserWithEmailAndPassword(email,passwordOne)
       .then(authUser => {
-        this.setState(() => ({...INITIAL_STATE}));
-        history.push(routes.HOME);
+        db.doCreateUser(authUser.uid, username, email)
+        .then(() => {
+          this.setState(() => ({...INITIAL_STATE}));
+          history.push(routes.HOME);
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error));
+        });
       })
       .catch(error => {
-        this.setState(byPropKey('error', error));
+        this.setState(byPropKey('error'), error);
       });
 
-      event.preventDefault();
-
+    event.preventDefault();
   }
 
   render() {

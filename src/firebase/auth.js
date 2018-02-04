@@ -12,7 +12,7 @@ export const doSignInWithEmailAndPassword = (email, password) =>
 export const doSignOut = () =>
   auth.signOut();
 
-export const doPasswordReser = (email) =>
+export const doPasswordReset = (email) =>
   auth.sendPasswordResetEmail(email);
 
 export const doPasswordUpdate = (password) =>
